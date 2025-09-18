@@ -16,8 +16,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ type, onClose, onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const demoCredentials = type === 'student' 
-    ? { email: 'alex.chen@school.edu', password: 'demo123' }
-    : { email: 'teacher@school.edu', password: 'demo123' };
+    ? { email: 'arjun.sharma@school.edu', password: 'demo123' }
+    : { email: 'priya.gupta@school.edu', password: 'demo123' };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

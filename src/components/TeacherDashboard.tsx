@@ -162,10 +162,10 @@ const TeacherDashboard: React.FC<TeacherDashboardProps> = ({ user, onLogout, onB
   }, []);
 
   const recentActivities = [
-    { student: 'Sarah Johnson', action: 'Completed "No-Plastic Week"', time: '2 hours ago', type: 'success' },
-    { student: 'Mike Rodriguez', action: 'Planted a sapling', time: '4 hours ago', type: 'success' },
-    { student: 'Alex Chen', action: 'Submitted energy audit', time: '6 hours ago', type: 'pending' },
-    { student: 'Emma Wilson', action: 'Joined cleanup drive', time: '1 day ago', type: 'info' }
+    { student: 'Ananya Patel', action: 'Completed "No-Plastic Week"', time: '2 hours ago', type: 'success' },
+    { student: 'Rohan Verma', action: 'Planted a sapling', time: '4 hours ago', type: 'success' },
+    { student: 'Arjun Sharma', action: 'Submitted energy audit', time: '6 hours ago', type: 'pending' },
+    { student: 'Kavya Singh', action: 'Joined cleanup drive', time: '1 day ago', type: 'info' }
   ];
 
   const handleCreateChallenge = () => {

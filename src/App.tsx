@@ -65,10 +65,10 @@ function App() {
   const handleLogin = (email: string, password: string, isSignUp: boolean = false) => {
     // Mock authentication with demo users
     const demoUsers: Record<string, User> = {
-      'alex.chen@school.edu': {
+      'arjun.sharma@school.edu': {
         id: '1',
-        name: 'Alex Chen',
-        email: 'alex.chen@school.edu',
+        name: 'Arjun Sharma',
+        email: 'arjun.sharma@school.edu',
         type: 'student',
         avatar: '🌱',
         level: 15,
@@ -77,10 +77,10 @@ function App() {
         badges: ['🌱', '♻️', '💧', '⚡', '🚴', '🌳', '🏆', '⭐', '🌿', '🌟', '🔋', '🌍'],
         rank: 3
       },
-      'teacher@school.edu': {
+      'priya.gupta@school.edu': {
         id: '2',
-        name: 'Dr. Sarah Wilson',
-        email: 'teacher@school.edu',
+        name: 'Dr. Priya Gupta',
+        email: 'priya.gupta@school.edu',
         type: 'teacher',
         avatar: '👩‍🏫'
       }
@@ -92,7 +92,7 @@ function App() {
       // Create new user for sign up
       user = {
         id: Date.now().toString(),
-        name: email.split('@')[0].replace('.', ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         email,
         type: authType,
         avatar: authType === 'student' ? '🌱' : '👩‍🏫',

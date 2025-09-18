@@ -103,11 +103,11 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, onLogout, onU
   }, []);
 
   const leaderboardData = [
-    { rank: 1, name: 'Sarah Johnson', xp: 3200, avatar: '🌟', level: 18 },
-    { rank: 2, name: 'Mike Rodriguez', xp: 2800, avatar: '🏆', level: 16 },
+    { rank: 1, name: 'Ananya Patel', xp: 3200, avatar: '🌟', level: 18 },
+    { rank: 2, name: 'Rohan Verma', xp: 2800, avatar: '🏆', level: 16 },
     { rank: 3, name: user.name, xp: user.xp || 2450, avatar: user.avatar, level: user.level || 15 },
-    { rank: 4, name: 'Emma Wilson', xp: 2100, avatar: '🌿', level: 14 },
-    { rank: 5, name: 'David Kim', xp: 1950, avatar: '⚡', level: 13 }
+    { rank: 4, name: 'Kavya Singh', xp: 2100, avatar: '🌿', level: 14 },
+    { rank: 5, name: 'Aditya Kumar', xp: 1950, avatar: '⚡', level: 13 }
   ];
 
   const handleQuestClick = (quest: Quest) => {
