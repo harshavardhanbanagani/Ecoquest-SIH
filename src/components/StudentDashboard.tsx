@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Trophy, Target, Camera, Leaf, Zap, Star, Calendar, Users, Award, ChevronRight, LogOut, Upload, CheckCircle, Clock, Play, ArrowLeft } from 'lucide-react';
+import QuestVerificationModal from './QuestVerificationModal';
+import type { VerificationResult } from '../utils/imageVerification';
 import type { User as UserType, Quest, Achievement } from '../App';
 
 interface StudentDashboardProps {
@@ -14,8 +16,7 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, onLogout, onU
   const [quests, setQuests] = useState<Quest[]>([]);
   const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
-  const [showQuestModal, setShowQuestModal] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   // Initialize data
   useEffect(() => {
@@ -111,18 +112,11 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, onLogout, onU
 
   const handleQuestClick = (quest: Quest) => {
     setSelectedQuest(quest);
-    setShowQuestModal(true);
+    setShowVerificationModal(true);
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setUploadedFile(file);
-    }
-  };
-
-  const handleQuestSubmission = () => {
-    if (selectedQuest && uploadedFile) {
+  const handleQuestSubmission = (verificationResult: VerificationResult) => {
+    if (selectedQuest && verificationResult.isValid) {
       // Simulate quest progress update
       const updatedQuests = quests.map(quest => {
         if (quest.id === selectedQuest.id) {
@@ -156,12 +150,11 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, onLogout, onU
       });
 
       setQuests(updatedQuests);
-      setShowQuestModal(false);
-      setUploadedFile(null);
+      setShowVerificationModal(false);
       setSelectedQuest(null);
 
       // Show success message
-      alert('Quest progress updated successfully! 🎉');
+      alert(`Quest progress updated successfully! 🎉\nAI Confidence: ${Math.round(verificationResult.confidence * 100)}%`);
     }
   };
 
@@ -617,76 +610,15 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({ user, onLogout, onU
       </div>
 
       {/* Quest Modal */}
-      {showQuestModal && selectedQuest && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={() => setShowQuestModal(false)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="text-sm">Back to Quests</span>
-              </button>
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">{selectedQuest.title}</h3>
-            <p className="text-gray-600 mb-4">{selectedQuest.description}</p>
-            
-            <div className="mb-4">
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
-                <span>Progress</span>
-                <span>{selectedQuest.progress}/{selectedQuest.total}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div 
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 h-2 rounded-full"
-                  style={{ width: `${(selectedQuest.progress / selectedQuest.total) * 100}%` }}
-                ></div>
-              </div>
-            </div>
-
-            {!selectedQuest.completed && (
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Upload Evidence
-                </label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-green-400 transition-colors">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                  />
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-sm text-gray-600">
-                      {uploadedFile ? uploadedFile.name : 'Click to upload photo evidence'}
-                    </p>
-                  </label>
-                </div>
-              </div>
-            )}
-
-            <div className="flex space-x-3">
-              <button
-                onClick={() => setShowQuestModal(false)}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              {!selectedQuest.completed && (
-                <button
-                  onClick={handleQuestSubmission}
-                  disabled={!uploadedFile}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Submit Progress
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+      {showVerificationModal && selectedQuest && (
+        <QuestVerificationModal
+          quest={selectedQuest}
+          onClose={() => {
+            setShowVerificationModal(false);
+            setSelectedQuest(null);
+          }}
+          onSubmit={handleQuestSubmission}
+        />
       )}
     </div>
   );
