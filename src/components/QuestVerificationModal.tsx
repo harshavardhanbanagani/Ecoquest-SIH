@@ -42,8 +42,11 @@ const QuestVerificationModal: React.FC<QuestVerificationModalProps> = ({ quest, 
     if (!uploadedFile) return;
 
     setIsVerifying(true);
+    console.log('Starting image verification for quest:', quest.title);
+    
     try {
       const result = await imageVerificationService.verifyQuestImage(quest.title, uploadedFile);
+      console.log('Verification result received:', result);
       setVerificationResult(result);
     } catch (error) {
       console.error('Verification error:', error);
@@ -239,9 +242,12 @@ const QuestVerificationModal: React.FC<QuestVerificationModalProps> = ({ quest, 
                   <div>
                     <p className="font-medium text-blue-900">AI Verification in Progress</p>
                     <p className="text-sm text-blue-700">
-                      Our AI is analyzing your image to verify quest completion...
+                      Analyzing image content, detecting objects, and validating against quest requirements...
                     </p>
                   </div>
+                </div>
+                <div className="mt-2 w-full bg-blue-200 rounded-full h-1">
+                  <div className="bg-blue-600 h-1 rounded-full animate-pulse" style={{ width: '60%' }}></div>
                 </div>
               </div>
             )}
@@ -295,14 +301,14 @@ const QuestVerificationModal: React.FC<QuestVerificationModalProps> = ({ quest, 
                   {/* Detected Objects */}
                   {verificationResult.detectedObjects.length > 0 && (
                     <div className="mb-3">
-                      <p className="text-xs font-medium mb-2">AI Detected:</p>
+                      <p className="text-xs font-medium mb-2">🤖 AI Detected Objects:</p>
                       <div className="flex flex-wrap gap-1">
                         {verificationResult.detectedObjects.map((obj, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-white bg-opacity-50 rounded text-xs"
+                            className="px-2 py-1 bg-white bg-opacity-70 rounded-full text-xs font-medium border"
                           >
-                            {obj}
+                            {obj.charAt(0).toUpperCase() + obj.slice(1)}
                           </span>
                         ))}
                       </div>
@@ -312,11 +318,10 @@ const QuestVerificationModal: React.FC<QuestVerificationModalProps> = ({ quest, 
                   {/* Suggestions for failed verification */}
                   {!verificationResult.isValid && verificationResult.suggestions && (
                     <div>
-                      <p className="text-xs font-medium mb-2 text-red-900">Suggestions:</p>
+                      <p className="text-xs font-medium mb-2 text-red-900">💡 Suggestions for Better Results:</p>
                       <ul className="space-y-1">
                         {verificationResult.suggestions.map((suggestion, index) => (
-                          <li key={index} className="text-xs text-red-800 flex items-start">
-                            <span className="mr-2">•</span>
+                          <li key={index} className="text-xs text-red-800">
                             <span>{suggestion}</span>
                           </li>
                         ))}
